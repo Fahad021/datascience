@@ -45,10 +45,8 @@ def read_image(filename):
     width, height = image.size
     rows_cols = []
     for row in range(height):
-        this_row = []
         row_offset = row * width
-        for col in range(width):
-            this_row.append(pixels[row_offset + col])
+        this_row = [pixels[row_offset + col] for col in range(width)]
         rows_cols.append(this_row)
     return rows_cols
 
@@ -76,10 +74,7 @@ def get_width(image):
     taken to be the length of the first row of pixels. If the image is
     empty, then the width is defined to be 0.
     """
-    if len(image) == 0:
-        return 0
-    else:
-        return len(image[0])
+    return 0 if len(image) == 0 else len(image[0])
 
 
 def get_height(image):
@@ -122,7 +117,6 @@ def gradient_row(image, row, col):
     :param col: column number
     :return: partial differential of the row gradient
     """
-    count = 0
     gradient = 0
     matrix = [-1, 0, 1]
     kernel = ((1, 2, 1), (0, 0, 0), (-1, -2, -1))
@@ -131,15 +125,13 @@ def gradient_row(image, row, col):
     length = get_height(image) - 1
     width = get_width(image) - 1
 
-    for n in matrix:
+    for count, n in enumerate(matrix):
         for m in matrix:
 
             if (0 < row < length) and (0 < col < width):
                 gradient += image[row + n][col + m] * kernel[count][m + 1]
             else:
                 gradient += get_pixel(image, row + n, col + m) * kernel[count][m + 1]
-
-        count += 1
 
     return gradient
 
@@ -154,7 +146,6 @@ def gradient_column(image, row, col):
         :param col: column number
         :return: partial differential of the column gradient
     """
-    count = 0
     gradient = 0
     col_matrix = [1, 0, -1]
     kernel = ((1, 2, 1), (0, 0, 0), (-1, -2, -1))
@@ -163,15 +154,13 @@ def gradient_column(image, row, col):
     length = get_height(image) - 1
     width = get_width(image) - 1
 
-    for n in col_matrix:
+    for count, n in enumerate(col_matrix):
         for m in col_matrix:
 
             if (0 < row < length) and (0 < col < width):
                 gradient += image[row + m][col + n] * kernel[count][m + 1]
             else:
                 gradient += get_pixel(image, row + m, col + n) * kernel[count][m + 1]
-
-        count += 1
 
     return gradient
 
@@ -235,7 +224,7 @@ def edge_detect(in_filename, out_filename, threshold=200):
     """
     in_image = read_image(in_filename)
     out_image = convolute(in_image, threshold)
-    write_image(out_image,out_filename+'_'+str(threshold)+'.png')
+    write_image(out_image, f'{out_filename}_{str(threshold)}.png')
 
 
 def main():

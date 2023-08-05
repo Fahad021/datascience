@@ -10,14 +10,11 @@ cv2.haarcascades
 
 
 def multiply(a, b):
-    c = a * b
-
-    return c
+    return a * b
 
 def check():
 
-    if 10:
-        print ('What is happening')
+    print ('What is happening')
 
 
 if __name__ == '__main__':
